@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleExecutable</key>
+  <string>App</string>
+  <key>CFBundleIdentifier</key>
+  <string>io.flutter.flutter.app</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>App</string>
+  <key>CFBundlePackageType</key>
+  <string>FMWK</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
+  <key>CFBundleVersion</key>
+  <string>1.0</string>
+  <key>MinimumOSVersion</key>
+  <string>11.0</string>
+
+  <key>NSAppleMusicUsageDescription</key>
+<string>Music!</string>
+<key>kTCCServiceMediaLibrary</key>
+<string>media</string>
+<key>NSCalendarsUsageDescription</key>
+<string>Calendars</string>
+<key>NSCameraUsageDescription</key>
+<string>camera</string>
+<key>NSContactsUsageDescription</key>
+<string>contacts</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>microphone</string>
+<key>NSSpeechRecognitionUsageDescription</key>
+<string>speech</string>
+<key>NSMotionUsageDescription</key>
+<string>motion</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>photos</string>
+<key>NSRemindersUsageDescription</key>
+<string>reminders</string>
+</dict>
+</plist>
