@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import '../components/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './main_dialer.dart';
+import 'package:http/http.dart' as http;
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -16,6 +17,22 @@ class _LoginWidgetState extends State<LoginWidget> {
   final Url = TextEditingController();
   final Username = TextEditingController();
   final Password = TextEditingController();
+
+  String _response = '';
+
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse(
+        'http://pbx.warmconnect.in/dli.e?l=binu&p=chicken64&lp=da.e'));
+    if (response.statusCode == 200) {
+      setState(() {
+        _response = response.body;
+      });
+    } else {
+      setState(() {
+        _response = 'Error: ${response.statusCode}';
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -57,6 +74,9 @@ class _LoginWidgetState extends State<LoginWidget> {
         ElevatedButton(
             onPressed: () {
               _saveValuesToPreferences();
+              fetchData();
+              print("hello");
+              print(_response);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MainDialer()),
