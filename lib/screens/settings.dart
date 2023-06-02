@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../components/input_field.dart';
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -51,26 +52,8 @@ class _SettingsWidget extends State<SettingsWidget> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: _number1Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter a fixed number',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: _number2Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'Enter option'),
-            ),
-          ),
+          InputFieldMaker('Enter a fixed number', _number1Controller),
+          InputFieldMaker('Enter option', _number1Controller),
           ElevatedButton(
             onPressed: () {
               int number1 = int.tryParse(_number1Controller.text) ?? 0;
