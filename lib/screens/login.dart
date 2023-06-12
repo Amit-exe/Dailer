@@ -75,9 +75,9 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(children: [
-        InputFieldMaker('Enter url', Url),
-        InputFieldMaker('Username', Username),
-        InputFieldMaker('Password', Password),
+        InputFieldMaker('Enter url', Url, TextInputType.url),
+        InputFieldMaker('Username', Username, TextInputType.text),
+        InputFieldMaker('Password', Password, TextInputType.visiblePassword),
         ElevatedButton(
             onPressed: () async {
               fetchData();

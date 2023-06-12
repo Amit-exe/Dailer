@@ -72,14 +72,15 @@ class _MainDialerState extends State<MainDialer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            InputFieldMaker('Enter a fixed number', fixed_no),
-            InputFieldMaker('Enter option', extension),
+            InputFieldMaker(
+                'Enter a fixed number', fixed_no, TextInputType.number),
+            InputFieldMaker('Enter option', extension, TextInputType.number),
             Row(
               children: [
                 Container(
                   width: 300,
-                  child:
-                      InputFieldMaker('Enter number to dial', number_to_dial),
+                  child: InputFieldMaker('Enter number to dial', number_to_dial,
+                      TextInputType.number),
                 ),
                 IconButton(
                   icon: const Icon(Icons.contact_page),
