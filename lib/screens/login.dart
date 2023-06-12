@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -19,13 +21,18 @@ class _LoginWidgetState extends State<LoginWidget> {
   final Password = TextEditingController();
 
   String _response = '';
+  String url = "";
 
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse(
-        'http://pbx.warmconnect.in/dli.e?l=binu&p=chicken64&lp=da.e'));
+    url =
+        'http://${Url.text}/pbxlogin.py?l=${Username.text}&p=${Password.text}&action=login';
+    print(url);
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       setState(() {
         _response = response.body;
+        print("type");
+        print(_response.runtimeType);
       });
     } else {
       setState(() {
@@ -72,11 +79,20 @@ class _LoginWidgetState extends State<LoginWidget> {
         InputFieldMaker('Username', Username),
         InputFieldMaker('Password', Password),
         ElevatedButton(
-            onPressed: () {
-              _saveValuesToPreferences();
+            onPressed: () async {
               fetchData();
+              _saveValuesToPreferences();
               print("hello");
               print(_response);
+              if (_response.isNotEmpty) {
+                _response = _response.replaceAll("'", '"');
+                Map<String, dynamic> mapData = jsonDecode(_response);
+                print(mapData);
+                print(mapData['number']);
+
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setString('number1', mapData['number']);
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MainDialer()),
