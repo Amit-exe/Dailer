@@ -55,7 +55,7 @@ class _SettingsWidget extends State<SettingsWidget> {
           InputFieldMaker(
               'Enter a fixed number', _number1Controller, TextInputType.number),
           InputFieldMaker(
-              'Enter option', _number1Controller, TextInputType.number),
+              'Enter option', _number2Controller, TextInputType.number),
           ElevatedButton(
             onPressed: () {
               int number1 = int.tryParse(_number1Controller.text) ?? 0;

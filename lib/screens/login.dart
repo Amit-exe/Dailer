@@ -80,6 +80,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         InputFieldMaker('Password', Password, TextInputType.visiblePassword),
         ElevatedButton(
             onPressed: () async {
+              bool? isloginvalid;
               fetchData();
               _saveValuesToPreferences();
               print("hello");
@@ -90,13 +91,24 @@ class _LoginWidgetState extends State<LoginWidget> {
                 print(mapData);
                 print(mapData['number']);
 
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString('number1', mapData['number']);
+                if (mapData['status'] == 'login success') {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setString('number1', mapData['number']);
+                  isloginvalid = true;
+                } else {
+                  isloginvalid = false;
+                }
+
+                print(isloginvalid);
               }
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainDialer()),
-              );
+
+              if (isloginvalid == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MainDialer()),
+                );
+              }
             },
             child: Text('Login'))
       ]),
