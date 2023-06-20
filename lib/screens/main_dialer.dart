@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/input_field.dart';
 import './settings.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class MainDialer extends StatefulWidget {
   const MainDialer({super.key});
@@ -51,6 +52,7 @@ class _MainDialerState extends State<MainDialer> {
         title: const Text(
           "Dialer",
         ),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blueGrey[900],
         actions: <Widget>[
           IconButton(
@@ -104,13 +106,14 @@ class _MainDialerState extends State<MainDialer> {
                       number_to_dial.text +
                       "#";
 
-                  print(callnow);
-                  final call = Uri.parse(callnow);
-                  if (await canLaunchUrl(call)) {
-                    launchUrl(call);
-                  } else {
-                    throw 'Could not launch $call';
-                  }
+                  await FlutterPhoneDirectCaller.callNumber(callnow);
+                  // print(callnow);
+                  // final call = Uri.parse(callnow);
+                  // if (await canLaunchUrl(call)) {
+                  //   launchUrl(call);
+                  // } else {
+                  //   throw 'Could not launch $call';
+                  // }
                 },
                 child: const Text('Call'),
               ),

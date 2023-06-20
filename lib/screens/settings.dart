@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/input_field.dart';
+import 'main_dialer.dart';
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -58,14 +59,21 @@ class _SettingsWidget extends State<SettingsWidget> {
               'Enter option', _number2Controller, TextInputType.number),
           ElevatedButton(
             onPressed: () {
-              int number1 = int.tryParse(_number1Controller.text) ?? 0;
-              int number2 = int.tryParse(_number2Controller.text) ?? 0;
+              int? number1, number2;
+              setState(() {
+                number1 = int.tryParse(_number1Controller.text) ?? 0;
+                number2 = int.tryParse(_number2Controller.text) ?? 0;
+              });
+
               // Do something with the numbers
               print('Number 1: $number1, Number 2: $number2');
 
               _saveValuesToPreferences();
 
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MainDialer()),
+              );
             },
             child: Text('OK'),
           ),

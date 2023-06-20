@@ -17,6 +17,7 @@ dependencies:
   shared_preferences:
   fluttercontactpicker:
   http: 
+  flutter_phone_direct_caller: ^2.1.1
 
 
 

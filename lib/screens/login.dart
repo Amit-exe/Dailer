@@ -77,11 +77,22 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: Column(children: [
         InputFieldMaker('Enter url', Url, TextInputType.url),
         InputFieldMaker('Username', Username, TextInputType.text),
-        InputFieldMaker('Password', Password, TextInputType.visiblePassword),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: TextField(
+            obscureText: true,
+            controller: Password,
+            keyboardType: TextInputType.visiblePassword,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+            ),
+          ),
+        ),
         ElevatedButton(
             onPressed: () async {
               bool? isloginvalid;
-              fetchData();
+              await fetchData();
               _saveValuesToPreferences();
               print("hello");
               print(_response);
