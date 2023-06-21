@@ -51,6 +51,7 @@ class _MainDialerState extends State<MainDialer> {
       appBar: AppBar(
         title: const Text(
           "Dialer",
+          style: TextStyle(color: Colors.white),
         ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.blueGrey[900],
@@ -71,6 +72,7 @@ class _MainDialerState extends State<MainDialer> {
         ],
       ),
       body: Container(
+        margin: EdgeInsets.only(top:30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -85,6 +87,7 @@ class _MainDialerState extends State<MainDialer> {
                       TextInputType.number),
                 ),
                 IconButton(
+                  style: ButtonStyle(iconSize: MaterialStateProperty.all(20)),
                   icon: const Icon(Icons.contact_page),
                   onPressed: () async {
                     final PhoneContact contact =
@@ -95,27 +98,34 @@ class _MainDialerState extends State<MainDialer> {
                 ),
               ],
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  final String callnow = "tel:" +
-                      fixed_no.text +
-                      ",," +
-                      extension.text +
-                      ",," +
-                      number_to_dial.text +
-                      "#";
-
-                  await FlutterPhoneDirectCaller.callNumber(callnow);
-                  // print(callnow);
-                  // final call = Uri.parse(callnow);
-                  // if (await canLaunchUrl(call)) {
-                  //   launchUrl(call);
-                  // } else {
-                  //   throw 'Could not launch $call';
-                  // }
-                },
-                child: const Text('Call'),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                   
+              minimumSize: const Size.fromHeight(50), // NEW
+                  ),
+                  onPressed: () async {
+                    final String callnow = "tel:" +
+                        fixed_no.text +
+                        ",," +
+                        extension.text +
+                        ",," +
+                        number_to_dial.text +
+                        "#";
+            
+                    await FlutterPhoneDirectCaller.callNumber(callnow);
+                    // print(callnow);
+                    // final call = Uri.parse(callnow);
+                    // if (await canLaunchUrl(call)) {
+                    //   launchUrl(call);
+                    // } else {
+                    //   throw 'Could not launch $call';
+                    // }
+                  },
+                  child: const Text('Call'),
+                ),
               ),
             ),
           ],

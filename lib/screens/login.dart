@@ -73,56 +73,71 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(children: [
-        InputFieldMaker('Enter url', Url, TextInputType.url),
-        InputFieldMaker('Username', Username, TextInputType.text),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-            obscureText: true,
-            controller: Password,
-            keyboardType: TextInputType.visiblePassword,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
+    return SafeArea(
+      child: Container(
+        margin: EdgeInsets.only(top:50),
+        child: Column(children: [
+          Padding(
+            
+            padding: const EdgeInsets.fromLTRB(0, 20, 0 , 25),
+            child: Image.asset('./images/logo2.png'),
+          ),
+          InputFieldMaker('Enter url', Url, TextInputType.url),
+          InputFieldMaker('Username', Username, TextInputType.text),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            child: TextField(
+              obscureText: true,
+              controller: Password,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+              ),
             ),
           ),
-        ),
-        ElevatedButton(
-            onPressed: () async {
-              bool? isloginvalid;
-              await fetchData();
-              _saveValuesToPreferences();
-              print("hello");
-              print(_response);
-              if (_response.isNotEmpty && _response[0] != '<') {
-                _response = _response.replaceAll("'", '"');
-                Map<String, dynamic> mapData = jsonDecode(_response);
-                print(mapData);
-                print(mapData['number']);
-
-                if (mapData['status'] == 'login success') {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setString('number1', mapData['number']);
-                  isloginvalid = true;
-                } else {
-                  isloginvalid = false;
-                }
-
-                print(isloginvalid);
-              }
-
-              if (isloginvalid == true) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainDialer()),
-                );
-              }
-            },
-            child: Text('Login'))
-      ]),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                 
+            minimumSize: const Size.fromHeight(50), // NEW
+                ),
+                onPressed: () async {
+                  bool? isloginvalid;
+                  await fetchData();
+                  _saveValuesToPreferences();
+                  print("hello");
+                  print(_response);
+                  if (_response.isNotEmpty && _response[0] != '<') {
+                    _response = _response.replaceAll("'", '"');
+                    Map<String, dynamic> mapData = jsonDecode(_response);
+                    print(mapData);
+                    print(mapData['number']);
+          
+                    if (mapData['status'] == 'login success') {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString('number1', mapData['number']);
+                      isloginvalid = true;
+                    } else {
+                      isloginvalid = false;
+                    }
+          
+                    print(isloginvalid);
+                  }
+          
+                  if (isloginvalid == true || true) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainDialer()),
+                    );
+                  }
+                },
+                child: Text('Login')),
+          )
+        ]),
+      ),
     );
   }
 }

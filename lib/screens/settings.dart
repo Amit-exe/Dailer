@@ -48,36 +48,49 @@ class _SettingsWidget extends State<SettingsWidget> {
       appBar: AppBar(
         title: const Text(
           "Dialer",
+          // style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blueGrey[900],
+        foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          InputFieldMaker(
-              'Enter a fixed number', _number1Controller, TextInputType.number),
-          InputFieldMaker(
-              'Enter option', _number2Controller, TextInputType.number),
-          ElevatedButton(
-            onPressed: () {
-              int? number1, number2;
-              setState(() {
-                number1 = int.tryParse(_number1Controller.text) ?? 0;
-                number2 = int.tryParse(_number2Controller.text) ?? 0;
-              });
+      body: Container(
+        margin: EdgeInsets.only(top:30),
 
-              // Do something with the numbers
-              print('Number 1: $number1, Number 2: $number2');
-
-              _saveValuesToPreferences();
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainDialer()),
-              );
-            },
-            child: Text('OK'),
-          ),
-        ],
+        child: Column(
+          children: [
+            InputFieldMaker(
+                'Enter a fixed number', _number1Controller, TextInputType.number),
+            InputFieldMaker(
+                'Enter option', _number2Controller, TextInputType.number),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                   
+              minimumSize: const Size.fromHeight(50), // NEW
+                  ),
+                onPressed: () {
+                  int? number1, number2;
+                  setState(() {
+                    number1 = int.tryParse(_number1Controller.text) ?? 0;
+                    number2 = int.tryParse(_number2Controller.text) ?? 0;
+                  });
+                  
+                  // Do something with the numbers
+                  print('Number 1: $number1, Number 2: $number2');
+                  
+                  _saveValuesToPreferences();
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainDialer()),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
