@@ -25,7 +25,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Future<void> fetchData() async {
     url =
-        'http://${Url.text}/pbxlogin.py?l=${Username.text}&p=${Password.text}&action=login';
+        'http://${Url.text}/dli.e?l=${Username.text}&p=${Password.text}&lp=pbxlogin.py%3Fa%3Dlogin';
     print(url);
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
@@ -96,7 +96,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               _saveValuesToPreferences();
               print("hello");
               print(_response);
-              if (_response.isNotEmpty) {
+              if (_response.isNotEmpty && _response[0] != '<') {
                 _response = _response.replaceAll("'", '"');
                 Map<String, dynamic> mapData = jsonDecode(_response);
                 print(mapData);
