@@ -25,7 +25,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Future<void> fetchData() async {
     url =
-        'http://${Url.text}/dli.e?l=${Username.text}&p=${Password.text}&lp=pbxlogin.py%3Fa%3Dlogin';
+        'http://${Url.text}/pbxlogin.py?l=${Username.text}&p=${Password.text}&a=login';
     print(url);
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
@@ -109,7 +109,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   _saveValuesToPreferences();
                   print("hello");
                   print(_response);
-                  if (_response.isNotEmpty && _response[0] != '<') {
+                  if (_response.isNotEmpty) {
                     _response = _response.replaceAll("'", '"');
                     Map<String, dynamic> mapData = jsonDecode(_response);
                     print(mapData);
@@ -127,7 +127,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     print(isloginvalid);
                   }
           
-                  if (isloginvalid == true || true) {
+                  if (isloginvalid == true) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const MainDialer()),
