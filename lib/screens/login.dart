@@ -74,7 +74,10 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+<<<<<<< HEAD
       child:SingleChildScrollView(
+=======
+>>>>>>> 3073f31edb094b34584946a218364ec5866142ab
       child: Container(
         margin: EdgeInsets.only(top:50),
         child: Column(children: [
@@ -139,7 +142,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           )
         ]),
       ),
+<<<<<<< HEAD
       ),
+=======
+>>>>>>> 3073f31edb094b34584946a218364ec5866142ab
     );
   }
 }
