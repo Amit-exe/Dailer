@@ -35,10 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
+
         // resizeToAvoidBottomInset : false,
-=======
->>>>>>> 3073f31edb094b34584946a218364ec5866142ab
         appBar: AppBar(
           title: const Text(
             
