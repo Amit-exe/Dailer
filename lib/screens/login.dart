@@ -71,6 +71,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     await prefs.setString('server_url', Url.text);
   }
 
+  bool remember_me= false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,10 +91,25 @@ class _LoginWidgetState extends State<LoginWidget> {
               obscureText: true,
               controller: Password,
               keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+            child: Row(
+              children: [
+                Checkbox(value: this.remember_me,
+                onChanged:(bool? value){
+                  setState(() {
+                    remember_me = value!;
+                  });
+                },
+                ),
+                Text('Remember me'),
+              ],
             ),
           ),
           Padding(
