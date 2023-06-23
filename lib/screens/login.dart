@@ -19,7 +19,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final Url = TextEditingController();
   final Username = TextEditingController();
   final Password = TextEditingController();
-
+  bool remember_me= false;
   String _response = '';
   String url = "";
 
@@ -60,18 +60,41 @@ class _LoginWidgetState extends State<LoginWidget> {
   Future<void> _loadValuesFromPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String server_url = prefs.getString('server_url') ?? '';
-
+    String username = prefs.getString('username') ?? '';
+    String password = prefs.getString('password') ?? '';
     setState(() {
       Url.text = server_url;
+      Password.text = password;
+      Username.text = username;
     });
+
+    bool? checkboxValue = prefs.getBool('checkboxValue');
+    if (checkboxValue != null) {
+      setState(() {
+        remember_me = checkboxValue;
+      });
+    }
   }
 
   Future<void> _saveValuesToPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('server_url', Url.text);
+    
   }
 
-  bool remember_me= false;
+  Future<void> _saveLoginCreds(String username, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', username);
+    await prefs.setString('password', password);
+
+  }
+
+  Future<void> updateCheckboxValue(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('checkboxValue', value);
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -109,6 +132,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                   setState(() {
                     remember_me = value!;
                   });
+                  if(remember_me){
+                      _saveLoginCreds(Username.text, Password.text);
+                    }
+                    else{
+                      _saveLoginCreds("", "");
+                    }
+                  updateCheckboxValue(remember_me);
                 },
                 ),
                 Text('Remember me'),
