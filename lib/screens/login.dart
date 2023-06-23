@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../components/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './main_dialer.dart';
@@ -19,9 +19,22 @@ class _LoginWidgetState extends State<LoginWidget> {
   final Url = TextEditingController();
   final Username = TextEditingController();
   final Password = TextEditingController();
-  bool remember_me= false;
+  bool remember_me = false;
   String _response = '';
   String url = "";
+
+  var alertStyle = AlertStyle(
+    animationType: AnimationType.grow,
+    isCloseButton: false,
+    descStyle: TextStyle(fontWeight: FontWeight.w400),
+    // animationDuration: Duration(milliseconds: 200),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      side: BorderSide(
+        color: Colors.grey,
+      ),
+    ),
+  );
 
   Future<void> fetchData() async {
     url =
@@ -79,14 +92,12 @@ class _LoginWidgetState extends State<LoginWidget> {
   Future<void> _saveValuesToPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('server_url', Url.text);
-    
   }
 
   Future<void> _saveLoginCreds(String username, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('username', username);
     await prefs.setString('password', password);
-
   }
 
   Future<void> updateCheckboxValue(bool value) async {
@@ -94,102 +105,104 @@ class _LoginWidgetState extends State<LoginWidget> {
     await prefs.setBool('checkboxValue', value);
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-
-      child:SingleChildScrollView(
-
-      child: Container(
-        margin: EdgeInsets.only(top:50),
-        child: Column(children: [
-          Padding(
-            
-            padding: const EdgeInsets.fromLTRB(0, 20, 0 , 25),
-            child: Image.asset('./images/logo2.png'),
-          ),
-          InputFieldMaker('Enter url', Url, TextInputType.url),
-          InputFieldMaker('Username', Username, TextInputType.text),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: TextField(
-              obscureText: true,
-              controller: Password,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: 50),
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 25),
+              child: Image.asset('./images/logo2.png'),
+            ),
+            InputFieldMaker('Enter url', Url, TextInputType.url),
+            InputFieldMaker('Username', Username, TextInputType.text),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              child: TextField(
+                obscureText: true,
+                controller: Password,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-            child: Row(
-              children: [
-                Checkbox(value: this.remember_me,
-                onChanged:(bool? value){
-                  setState(() {
-                    remember_me = value!;
-                  });
-                  if(remember_me){
-                      _saveLoginCreds(Username.text, Password.text);
-                    }
-                    else{
-                      _saveLoginCreds("", "");
-                    }
-                  updateCheckboxValue(remember_me);
-                },
-                ),
-                Text('Remember me'),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: this.remember_me,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        remember_me = value!;
+                      });
+                      if (remember_me) {
+                        _saveLoginCreds(Username.text, Password.text);
+                      } else {
+                        _saveLoginCreds("", "");
+                      }
+                      updateCheckboxValue(remember_me);
+                    },
+                  ),
+                  Text('Remember me'),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                 
-            minimumSize: const Size.fromHeight(50), // NEW
-                ),
-                onPressed: () async {
-                  bool? isloginvalid;
-                  await fetchData();
-                  _saveValuesToPreferences();
-                  print("hello");
-                  print(_response);
-                  if (_response.isNotEmpty) {
-                    _response = _response.replaceAll("'", '"');
-                    Map<String, dynamic> mapData = jsonDecode(_response);
-                    print(mapData);
-                    print(mapData['number']);
-          
-                    if (mapData['status'] == 'login success') {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setString('number1', mapData['number']);
-                      isloginvalid = true;
-                    } else {
-                      isloginvalid = false;
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50), // NEW
+                  ),
+                  onPressed: () async {
+                    bool? isloginvalid;
+                    await fetchData();
+                    _saveValuesToPreferences();
+                    print("hello");
+                    print(_response);
+                    if (_response.isNotEmpty) {
+                      _response = _response.replaceAll("'", '"');
+                      Map<String, dynamic> mapData = jsonDecode(_response);
+                      print(mapData);
+                      print(mapData['number']);
+
+                      if (mapData['status'] == 'login success') {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setString('number1', mapData['number']);
+                        isloginvalid = true;
+                      } else {
+                        isloginvalid = false;
+                      }
+
+                      print(isloginvalid);
                     }
-          
-                    print(isloginvalid);
-                  }
-          
-                  if (isloginvalid == true) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MainDialer()),
-                    );
-                  }
-                },
-                child: Text('Login')),
-          )
-        ]),
-      ),
 
+                    if (isloginvalid == true) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainDialer()),
+                      );
+                    } else {
+                      Alert(
+                              style: alertStyle,
+                              type: AlertType.error,
+                              context: context,
+                              title: "Invalid Login",
+                              desc: "Incorrect Password or username")
+                          .show();
+                    }
+                  },
+                  child: Text('Login')),
+            )
+          ]),
+        ),
       ),
-
     );
   }
 }

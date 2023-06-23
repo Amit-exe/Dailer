@@ -72,7 +72,7 @@ class _MainDialerState extends State<MainDialer> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.only(top:30),
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -103,8 +103,7 @@ class _MainDialerState extends State<MainDialer> {
               child: Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                   
-              minimumSize: const Size.fromHeight(50), // NEW
+                    minimumSize: const Size.fromHeight(50), // NEW
                   ),
                   onPressed: () async {
                     final String callnow = "tel:" +
@@ -114,7 +113,7 @@ class _MainDialerState extends State<MainDialer> {
                         ",," +
                         number_to_dial.text +
                         "#";
-            
+
                     await FlutterPhoneDirectCaller.callNumber(callnow);
                     // print(callnow);
                     // final call = Uri.parse(callnow);
