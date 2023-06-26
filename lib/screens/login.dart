@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../components/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './main_dialer.dart';
+import './navigation.dart';
 import 'package:http/http.dart' as http;
 
 class LoginWidget extends StatefulWidget {
@@ -185,8 +185,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     if (isloginvalid == true) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainDialer()),
+                        MaterialPageRoute(builder: (context) => AppBarPage()),
                       );
                     } else {
                       Alert(

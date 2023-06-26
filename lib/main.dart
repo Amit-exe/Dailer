@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightGreen,
       ),
       home: MyHomePage(),
-      debugShowCheckedModeBanner: false, 
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -39,10 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // resizeToAvoidBottomInset : false,
         appBar: AppBar(
           title: const Text(
-            
             "Dialer",
             style: TextStyle(color: Colors.white),
-            
           ),
           backgroundColor: Colors.blueGrey[900],
         ),

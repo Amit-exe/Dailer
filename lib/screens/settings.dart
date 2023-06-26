@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/input_field.dart';
-import 'main_dialer.dart';
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -54,37 +53,35 @@ class _SettingsWidget extends State<SettingsWidget> {
         foregroundColor: Colors.white,
       ),
       body: Container(
-        margin: EdgeInsets.only(top:30),
-
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           children: [
-            InputFieldMaker(
-                'Enter a fixed number', _number1Controller, TextInputType.number),
+            InputFieldMaker('Enter a fixed number', _number1Controller,
+                TextInputType.number),
             InputFieldMaker(
                 'Enter option', _number2Controller, TextInputType.number),
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                   
-              minimumSize: const Size.fromHeight(50), // NEW
-                  ),
+                  minimumSize: const Size.fromHeight(50), // NEW
+                ),
                 onPressed: () {
                   int? number1, number2;
                   setState(() {
                     number1 = int.tryParse(_number1Controller.text) ?? 0;
                     number2 = int.tryParse(_number2Controller.text) ?? 0;
                   });
-                  
+
                   // Do something with the numbers
                   print('Number 1: $number1, Number 2: $number2');
-                  
+
                   _saveValuesToPreferences();
-                  
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MainDialer()),
-                  );
+                  FocusScope.of(context).unfocus();
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const MainDialer()),
+                  // );
                 },
                 child: Text('OK'),
               ),
