@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../components/input_field.dart';
 import './settings.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'call_note.dart';
+import '../notes.dart';
 
 class MainDialer extends StatefulWidget {
   const MainDialer({super.key});
@@ -71,6 +73,7 @@ class _MainDialerState extends State<MainDialer> {
           )
         ],
       ),
+      backgroundColor: Color.fromRGBO(249, 253, 246, 1),
       body: Container(
         margin: EdgeInsets.only(top: 30),
         child: Column(
@@ -122,6 +125,15 @@ class _MainDialerState extends State<MainDialer> {
                     // } else {
                     //   throw 'Could not launch $call';
                     // }
+
+                    print("after calling");
+                    Note newNote = Note(
+                      title: 'New Note',
+                      description: 'Content of the new note',
+                    );
+                    NotesPage.addNewNote(context, newNote);
+
+                    print('added log');
                   },
                   child: const Text('Call'),
                 ),

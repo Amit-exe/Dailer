@@ -52,6 +52,7 @@ class _SettingsWidget extends State<SettingsWidget> {
         backgroundColor: Colors.blueGrey[900],
         foregroundColor: Colors.white,
       ),
+      backgroundColor: Color.fromRGBO(249, 253, 246, 1),
       body: Container(
         margin: EdgeInsets.only(top: 30),
         child: Column(
