@@ -28,8 +28,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    MainDialer(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const MainDialer(),
     CallNotes(),
     SettingsWidget(),
   ];

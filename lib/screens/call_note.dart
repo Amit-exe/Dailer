@@ -1,185 +1,94 @@
-// import 'package:flutter/material.dart';
-// import '../notes_data.dart';
-// import '../notes.dart';
-
-// NotesData notesData = NotesData();
-
-// class CallNotes extends StatefulWidget {
-//   const CallNotes({super.key});
-
-//   @override
-//   State<CallNotes> createState() => _CallNotesState();
-// }
-
-// class _CallNotesState extends State<CallNotes> {
-//   List<Note> note = notesData.getAll();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Color.fromRGBO(249, 253, 246, 1),
-//       appBar: AppBar(
-//         title: const Text(
-//           "Dialer",
-//           // style: TextStyle(color: Colors.white),
-//         ),
-//         backgroundColor: Colors.blueGrey[900],
-//         foregroundColor: Colors.white,
-//       ),
-//       body: Container(
-//           margin: EdgeInsets.only(top: 30),
-//           child: Column(
-//             children: note,
-//           )),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
-import '../notes.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:two_stage_d/db/notes_database.dart';
+import 'package:two_stage_d/model/note.dart';
+import 'package:two_stage_d/screens/edit_note_page.dart';
+import 'package:two_stage_d/screens/note_detail_page.dart';
+import 'package:two_stage_d/widget/note_card_widget.dart';
 
-class CallNotes extends StatelessWidget {
+class CallNotes extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Notes App',
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-      ),
-      home: NotesPage(),
-    );
-  }
+  _CallNotesState createState() => _CallNotesState();
 }
 
-class NotesPage extends StatefulWidget {
-  @override
-  _NotesPageState createState() => _NotesPageState();
-
-  static void addNewNote(BuildContext context, Note note) {
-    print("in unscore fun");
-    final _NotesPageState? state =
-        context.findAncestorStateOfType<_NotesPageState>();
-    state?.addNewNoteInternal(note);
-  }
-}
-
-class _NotesPageState extends State<NotesPage> {
-  List<Note> notes = [
-    Note(
-      title: 'Note 1',
-      description: 'Content of Note 1',
-    ),
-    Note(
-      title: 'Note 2',
-      description: 'Content of Note 2',
-    ),
-    Note(
-      title: 'Note 3',
-      description: 'Content of Note 3',
-    ),
-  ];
-
-  void _navigateToNotePage(Note note) async {
-    final updatedNote = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NotePage(note: note)),
-    );
-    if (updatedNote != null) {
-      setState(() {
-        final index = notes.indexOf(note);
-        if (index != -1) {
-          notes[index] = updatedNote;
-        }
-      });
-    }
-  }
-
-  void addNewNoteInternal(Note note) {
-    print("in add note");
-    setState(() {
-      notes.add(note);
-    });
-    _navigateToNotePage(note);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print(notes.length);
-    print(notes);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Dialer",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blueGrey[900],
-      ),
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          final note = notes[index];
-          return ListTile(
-            title: Text(note.title),
-            onTap: () => _navigateToNotePage(note),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class NotePage extends StatefulWidget {
-  final Note note;
-
-  const NotePage({Key? key, required this.note}) : super(key: key);
-
-  @override
-  _NotePageState createState() => _NotePageState();
-}
-
-class _NotePageState extends State<NotePage> {
-  late TextEditingController _contentController;
+class _CallNotesState extends State<CallNotes> {
+  late List<Note> notes;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _contentController = TextEditingController(text: widget.note.description);
+
+    refreshNotes();
   }
 
   @override
   void dispose() {
-    _contentController.dispose();
+    NotesDatabase.instance.close();
+
     super.dispose();
   }
 
-  void _saveNote() {
-    final updatedNote = Note(
-      title: widget.note.title,
-      description: _contentController.text,
-    );
-    Navigator.pop(context, updatedNote);
+  Future refreshNotes() async {
+    setState(() => isLoading = true);
+
+    this.notes = await NotesDatabase.instance.readAllNotes();
+
+    setState(() => isLoading = false);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.note.title),
-        actions: [
-          IconButton(
-            onPressed: _saveNote,
-            icon: Icon(Icons.save),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Notes',
+            style: TextStyle(fontSize: 24),
           ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: TextField(
-          controller: _contentController,
-          maxLines: null,
-          decoration: InputDecoration(
-            hintText: 'Enter content...',
-          ),
+          actions: [Icon(Icons.search), SizedBox(width: 12)],
         ),
-      ),
-    );
-  }
+        body: Center(
+          child: isLoading
+              ? CircularProgressIndicator()
+              : notes.isEmpty
+                  ? Text(
+                      'No Notes',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    )
+                  : buildNotes(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AddEditNotePage()),
+            );
+
+            refreshNotes();
+          },
+        ),
+      );
+
+  Widget buildNotes() => StaggeredGridView.countBuilder(
+        padding: EdgeInsets.all(8),
+        itemCount: notes.length,
+        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+        crossAxisCount: 4,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        itemBuilder: (context, index) {
+          final note = notes[index];
+
+          return GestureDetector(
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NoteDetailPage(noteId: note.id!),
+              ));
+
+              refreshNotes();
+            },
+            child: NoteCardWidget(note: note, index: index),
+          );
+        },
+      );
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/input_field.dart';
 import './settings.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'call_note.dart';
-import '../notes.dart';
 
 class MainDialer extends StatefulWidget {
   const MainDialer({super.key});
@@ -47,6 +46,36 @@ class _MainDialerState extends State<MainDialer> {
     });
   }
 
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                // Perform logout actions here
+                // ...
+
+                // Close the app
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,15 +89,16 @@ class _MainDialerState extends State<MainDialer> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.settings,
+              Icons.logout,
               color: Colors.white,
             ),
             onPressed: () {
               // do some{
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsWidget()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => SettingsWidget()),
+              // );
+              _showLogoutConfirmation(context);
             },
           )
         ],
@@ -80,14 +110,14 @@ class _MainDialerState extends State<MainDialer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             InputFieldMaker(
-                'Enter a fixed number', fixed_no, TextInputType.number),
-            InputFieldMaker('Enter option', extension, TextInputType.number),
+                'Enter a fixed number', fixed_no, TextInputType.phone),
+            InputFieldMaker('Enter option', extension, TextInputType.phone),
             Row(
               children: [
                 Container(
                   width: 300,
                   child: InputFieldMaker('Enter number to dial', number_to_dial,
-                      TextInputType.number),
+                      TextInputType.phone),
                 ),
                 IconButton(
                   style: ButtonStyle(iconSize: MaterialStateProperty.all(20)),
@@ -125,15 +155,6 @@ class _MainDialerState extends State<MainDialer> {
                     // } else {
                     //   throw 'Could not launch $call';
                     // }
-
-                    print("after calling");
-                    Note newNote = Note(
-                      title: 'New Note',
-                      description: 'Content of the new note',
-                    );
-                    NotesPage.addNewNote(context, newNote);
-
-                    print('added log');
                   },
                   child: const Text('Call'),
                 ),
