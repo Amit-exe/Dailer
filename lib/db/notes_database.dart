@@ -36,29 +36,20 @@ CREATE TABLE $tableNotes (
   ${NoteFields.number} $integerType,
   ${NoteFields.title} $textType,
   ${NoteFields.description} $textType,
-  ${NoteFields.time} $textType
+  ${NoteFields.time} $textType,
+  test $textType
   )
 ''');
   }
 
   Future<Note> create(Note note) async {
     final db = await instance.database;
-
-    // final json = note.toJson();
-    // final columns =
-    //     '${NoteFields.title}, ${NoteFields.description}, ${NoteFields.time}';
-    // final values =
-    //     '${json[NoteFields.title]}, ${json[NoteFields.description]}, ${json[NoteFields.time]}';
-    // final id = await db
-    //     .rawInsert('INSERT INTO table_name ($columns) VALUES ($values)');
-
     final id = await db.insert(tableNotes, note.toJson());
     return note.copy(id: id);
   }
 
   Future<Note> readNote(int id) async {
     final db = await instance.database;
-
     final maps = await db.query(
       tableNotes,
       columns: NoteFields.values,
@@ -75,19 +66,14 @@ CREATE TABLE $tableNotes (
 
   Future<List<Note>> readAllNotes() async {
     final db = await instance.database;
-
     final orderBy = '${NoteFields.time} ASC';
-    // final result =
-    //     await db.rawQuery('SELECT * FROM $tableNotes ORDER BY $orderBy');
-
-    final result = await db.query(tableNotes, orderBy: orderBy);
+    final result = await db.rawQuery('SELECT * FROM $tableNotes ORDER BY time');
 
     return result.map((json) => Note.fromJson(json)).toList();
   }
 
   Future<int> update(Note note) async {
     final db = await instance.database;
-
     return db.update(
       tableNotes,
       note.toJson(),
@@ -98,7 +84,6 @@ CREATE TABLE $tableNotes (
 
   Future<int> delete(int id) async {
     final db = await instance.database;
-
     return await db.delete(
       tableNotes,
       where: '${NoteFields.id} = ?',
@@ -108,7 +93,28 @@ CREATE TABLE $tableNotes (
 
   Future close() async {
     final db = await instance.database;
-
     db.close();
+  }
+
+  Future<void> printTableSchema() async {
+    final db = await instance.database;
+    final schemaQuery = "PRAGMA table_info($tableNotes)";
+    final result = await db.rawQuery(schemaQuery);
+
+    print("Table Schema:");
+    result.forEach((row) {
+      final cid = row['cid'];
+      final name = row['name'];
+      final type = row['type'];
+      final notNull = row['notnull'] == 1;
+      final defaultValue = row['dflt_value'];
+
+      print("Column $cid: $name ($type)");
+      print("Not Null: $notNull");
+      if (defaultValue != null) {
+        print("Default Value: $defaultValue");
+      }
+      print("---");
+    });
   }
 }
