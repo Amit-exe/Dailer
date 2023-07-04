@@ -36,8 +36,7 @@ CREATE TABLE $tableNotes (
   ${NoteFields.number} $integerType,
   ${NoteFields.title} $textType,
   ${NoteFields.description} $textType,
-  ${NoteFields.time} $textType,
-  test $textType
+  ${NoteFields.time} $textType
   )
 ''');
   }
@@ -92,6 +91,7 @@ CREATE TABLE $tableNotes (
   }
 
   Future close() async {
+    print("called me");
     final db = await instance.database;
     db.close();
   }

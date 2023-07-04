@@ -1,4 +1,4 @@
-package com.example.two_stage_d
+package com.example.dailer
 
 import io.flutter.embedding.android.FlutterActivity
 

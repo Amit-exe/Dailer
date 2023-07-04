@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:two_stage_d/db/notes_database.dart';
 import 'package:two_stage_d/model/note.dart';
@@ -18,15 +19,23 @@ class _CallNotesState extends State<CallNotes> {
   @override
   void initState() {
     super.initState();
-
+    testinit();
     refreshNotes();
   }
 
   @override
   void dispose() {
-    NotesDatabase.instance.close();
+    // NotesDatabase.instance.close();
 
     super.dispose();
+  }
+
+  Future testinit() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 
   Future refreshNotes() async {
@@ -52,12 +61,10 @@ class _CallNotesState extends State<CallNotes> {
               : notes.isEmpty
                   ? Text(
                       'No Notes',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
                     )
                   : buildNotes(),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black,
           child: Icon(Icons.add),
           onPressed: () async {
             await Navigator.of(context).push(
@@ -72,7 +79,7 @@ class _CallNotesState extends State<CallNotes> {
   Widget buildNotes() => StaggeredGridView.countBuilder(
         padding: EdgeInsets.all(8),
         itemCount: notes.length,
-        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
+        staggeredTileBuilder: (index) => StaggeredTile.fit(4),
         crossAxisCount: 4,
         mainAxisSpacing: 4,
         crossAxisSpacing: 4,
