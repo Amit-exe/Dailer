@@ -4,6 +4,8 @@ import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/input_field.dart';
+import '../db/notes_database.dart';
+import '../model/note.dart';
 import './settings.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
@@ -155,6 +157,7 @@ class _MainDialerState extends State<MainDialer> {
                     // } else {
                     //   throw 'Could not launch $call';
                     // }
+                    await addNote();
                   },
                   child: const Text('Call'),
                 ),
@@ -164,5 +167,17 @@ class _MainDialerState extends State<MainDialer> {
         ),
       ),
     );
+  }
+
+  Future addNote() async {
+    final note = Note(
+      title: number_to_dial.text,
+      isImportant: true,
+      number: 3,
+      description: "Outgoing call",
+      createdTime: DateTime.now(),
+    );
+
+    await NotesDatabase.instance.create(note);
   }
 }
