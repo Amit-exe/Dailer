@@ -35,6 +35,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           actions: [buildButton()],
+          backgroundColor: Colors.blueGrey[900],
+          foregroundColor: Colors.white,
         ),
         body: Form(
           key: _formKey,
@@ -58,9 +60,12 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      child: ElevatedButton(
+      child: IconButton(
+        icon: Icon(
+          Icons.save,
+          color: Colors.lightGreen,
+        ),
         onPressed: addOrUpdateNote,
-        child: Text('Save'),
       ),
     );
   }

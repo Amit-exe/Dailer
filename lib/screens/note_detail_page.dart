@@ -39,6 +39,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           actions: [editButton(), deleteButton()],
+          backgroundColor: Colors.blueGrey[900],
+          foregroundColor: Colors.white,
         ),
         body: isLoading
             ? Center(child: CircularProgressIndicator())
@@ -59,16 +61,24 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                       DateFormat.yMMMd().format(note.createdTime),
                     ),
                     SizedBox(height: 8),
-                    Text(
-                      note.description,
-                    )
+                    note.description.isEmpty
+                        ? Text(
+                            "Click on edit button to add something to this note",
+                            style: TextStyle(color: Colors.black38),
+                          )
+                        : Text(
+                            note.description,
+                          ),
                   ],
                 ),
               ),
       );
 
   Widget editButton() => IconButton(
-      icon: Icon(Icons.edit_outlined),
+      icon: Icon(
+        Icons.edit_outlined,
+        color: Colors.lightGreen,
+      ),
       onPressed: () async {
         if (isLoading) return;
 
@@ -80,7 +90,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       });
 
   Widget deleteButton() => IconButton(
-        icon: Icon(Icons.delete),
+        icon: Icon(
+          Icons.delete,
+          color: Colors.lightGreen,
+        ),
         onPressed: () async {
           await NotesDatabase.instance.delete(widget.noteId);
 

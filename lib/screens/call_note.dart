@@ -7,6 +7,8 @@ import 'package:two_stage_d/screens/edit_note_page.dart';
 import 'package:two_stage_d/screens/note_detail_page.dart';
 import 'package:two_stage_d/widget/note_card_widget.dart';
 
+import '../components/logout_function.dart';
+
 class CallNotes extends StatefulWidget {
   @override
   _CallNotesState createState() => _CallNotesState();
@@ -42,6 +44,7 @@ class _CallNotesState extends State<CallNotes> {
     setState(() => isLoading = true);
 
     this.notes = await NotesDatabase.instance.readAllNotes();
+    this.notes = notes.reversed.toList();
 
     setState(() => isLoading = false);
   }
@@ -50,10 +53,21 @@ class _CallNotesState extends State<CallNotes> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
-            'Notes',
-            style: TextStyle(fontSize: 24),
+            'Call Notes',
+            style: TextStyle(color: Colors.white),
           ),
-          actions: [Icon(Icons.search), SizedBox(width: 12)],
+          backgroundColor: Colors.blueGrey[900],
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showLogoutConfirmation(context);
+              },
+            )
+          ],
         ),
         body: Center(
           child: isLoading
@@ -64,16 +78,16 @@ class _CallNotesState extends State<CallNotes> {
                     )
                   : buildNotes(),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddEditNotePage()),
-            );
+        // floatingActionButton: FloatingActionButton(
+        //   child: Icon(Icons.add),
+        //   onPressed: () async {
+        //     await Navigator.of(context).push(
+        //       MaterialPageRoute(builder: (context) => AddEditNotePage()),
+        //     );
 
-            refreshNotes();
-          },
-        ),
+        //     refreshNotes();
+        //   },
+        // ),
       );
 
   Widget buildNotes() => StaggeredGridView.countBuilder(
@@ -81,8 +95,8 @@ class _CallNotesState extends State<CallNotes> {
         itemCount: notes.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(4),
         crossAxisCount: 4,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
+        mainAxisSpacing: 0,
+        crossAxisSpacing: 0,
         itemBuilder: (context, index) {
           final note = notes[index];
 

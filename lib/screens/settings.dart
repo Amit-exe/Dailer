@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/input_field.dart';
+import '../components/logout_function.dart';
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -51,6 +52,17 @@ class _SettingsWidget extends State<SettingsWidget> {
         ),
         backgroundColor: Colors.blueGrey[900],
         foregroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showLogoutConfirmation(context);
+            },
+          )
+        ],
       ),
       backgroundColor: Color.fromRGBO(249, 253, 246, 1),
       body: Container(

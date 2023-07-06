@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit_note),
-            label: 'Notes',
+            label: 'Call Notes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

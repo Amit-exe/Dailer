@@ -8,6 +8,7 @@ import '../db/notes_database.dart';
 import '../model/note.dart';
 import './settings.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:two_stage_d/components/logout_function.dart';
 
 class MainDialer extends StatefulWidget {
   const MainDialer({super.key});
@@ -48,36 +49,6 @@ class _MainDialerState extends State<MainDialer> {
     });
   }
 
-  void _showLogoutConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to log out?'),
-          actions: [
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                // Perform logout actions here
-                // ...
-
-                // Close the app
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +66,7 @@ class _MainDialerState extends State<MainDialer> {
               color: Colors.white,
             ),
             onPressed: () {
-              // do some{
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => SettingsWidget()),
-              // );
-              _showLogoutConfirmation(context);
+              showLogoutConfirmation(context);
             },
           )
         ],
@@ -114,24 +80,27 @@ class _MainDialerState extends State<MainDialer> {
             InputFieldMaker(
                 'Enter a fixed number', fixed_no, TextInputType.phone),
             InputFieldMaker('Enter option', extension, TextInputType.phone),
-            Row(
-              children: [
-                Container(
-                  width: 300,
-                  child: InputFieldMaker('Enter number to dial', number_to_dial,
-                      TextInputType.phone),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              child: TextFormField(
+                controller: number_to_dial,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter number to dial',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.contact_page,
+                    ),
+                    onPressed: () async {
+                      final PhoneContact contact =
+                          await FlutterContactPicker.pickPhoneContact();
+                      print(contact.phoneNumber!.number);
+                      number_to_dial.text = contact.phoneNumber!.number!;
+                    },
+                  ),
                 ),
-                IconButton(
-                  style: ButtonStyle(iconSize: MaterialStateProperty.all(20)),
-                  icon: const Icon(Icons.contact_page),
-                  onPressed: () async {
-                    final PhoneContact contact =
-                        await FlutterContactPicker.pickPhoneContact();
-                    print(contact.phoneNumber!.number);
-                    number_to_dial.text = contact.phoneNumber!.number!;
-                  },
-                ),
-              ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
@@ -171,10 +140,10 @@ class _MainDialerState extends State<MainDialer> {
 
   Future addNote() async {
     final note = Note(
-      title: number_to_dial.text,
+      title: "${number_to_dial.text} -Outgoing call",
       isImportant: true,
-      number: 3,
-      description: "Outgoing call",
+      number: 0,
+      description: "",
       createdTime: DateTime.now(),
     );
 

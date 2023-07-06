@@ -31,23 +31,20 @@ class NoteFormWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Switch(
-                    value: isImportant ?? false,
-                    onChanged: onChangedImportant,
-                  ),
+                  Text("Priority"),
                   Expanded(
                     child: Slider(
                       value: (number ?? 0).toDouble(),
                       min: 0,
-                      max: 5,
-                      divisions: 5,
+                      max: 3,
+                      divisions: 3,
                       onChanged: (number) => onChangedNumber(number.toInt()),
                     ),
                   )
                 ],
               ),
               buildTitle(),
-              SizedBox(height: 8),
+              SizedBox(height: 16),
               buildDescription(),
               SizedBox(height: 16),
             ],

@@ -23,6 +23,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   String _response = '';
   String url = "";
 
+  bool _obscureText = true;
   var alertStyle = AlertStyle(
     animationType: AnimationType.grow,
     isCloseButton: false,
@@ -120,14 +121,24 @@ class _LoginWidgetState extends State<LoginWidget> {
             InputFieldMaker('Username', Username, TextInputType.text),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              child: TextField(
-                obscureText: true,
+              child: TextFormField(
+                obscureText: _obscureText,
                 controller: Password,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
                 ),
+                keyboardType: TextInputType.visiblePassword,
               ),
             ),
             Padding(
