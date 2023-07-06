@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/input_field.dart';
-import 'main_dialer.dart';
+import '../components/logout_function.dart';
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -48,36 +48,59 @@ class _SettingsWidget extends State<SettingsWidget> {
       appBar: AppBar(
         title: const Text(
           "Dialer",
+          // style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blueGrey[900],
-      ),
-      body: Column(
-        children: [
-          InputFieldMaker(
-              'Enter a fixed number', _number1Controller, TextInputType.number),
-          InputFieldMaker(
-              'Enter option', _number2Controller, TextInputType.number),
-          ElevatedButton(
+        foregroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
             onPressed: () {
-              int? number1, number2;
-              setState(() {
-                number1 = int.tryParse(_number1Controller.text) ?? 0;
-                number2 = int.tryParse(_number2Controller.text) ?? 0;
-              });
-
-              // Do something with the numbers
-              print('Number 1: $number1, Number 2: $number2');
-
-              _saveValuesToPreferences();
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MainDialer()),
-              );
+              showLogoutConfirmation(context);
             },
-            child: Text('OK'),
-          ),
+          )
         ],
+      ),
+      backgroundColor: Color.fromRGBO(249, 253, 246, 1),
+      body: Container(
+        margin: EdgeInsets.only(top: 30),
+        child: Column(
+          children: [
+            InputFieldMaker('Enter a fixed number', _number1Controller,
+                TextInputType.phone, context),
+            InputFieldMaker('Enter option', _number2Controller,
+                TextInputType.phone, context),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50), // NEW
+                ),
+                onPressed: () {
+                  int? number1, number2;
+                  setState(() {
+                    number1 = int.tryParse(_number1Controller.text) ?? 0;
+                    number2 = int.tryParse(_number2Controller.text) ?? 0;
+                  });
+
+                  // Do something with the numbers
+                  print('Number 1: $number1, Number 2: $number2');
+
+                  _saveValuesToPreferences();
+                  FocusScope.of(context).unfocus();
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const MainDialer()),
+                  // );
+                },
+                child: Text('OK'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

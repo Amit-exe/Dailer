@@ -1,25 +1,27 @@
 name: two_stage_d
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.4 <3.0.0'
+  sdk: ">=2.19.4 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  
-  contacts_service: 
-  permission_handler: 
+
+  contacts_service:
+  permission_handler:
   flutter_contacts:
-  url_launcher: 
+  url_launcher:
   shared_preferences:
   fluttercontactpicker:
-  http: 
+  http:
   flutter_phone_direct_caller: ^2.1.1
-
-
+  rflutter_alert: ^2.0.7
+  sqflite: ^2.0.0+3
+  flutter_staggered_grid_view: ^0.4.0-nullsafety.3
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +30,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - images/
