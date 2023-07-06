@@ -117,8 +117,8 @@ class _LoginWidgetState extends State<LoginWidget> {
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 25),
               child: Image.asset('./images/logo2.png'),
             ),
-            InputFieldMaker('Enter url', Url, TextInputType.url),
-            InputFieldMaker('Username', Username, TextInputType.text),
+            InputFieldMaker('Enter url', Url, TextInputType.url, context),
+            InputFieldMaker('Username', Username, TextInputType.text, context),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               child: TextFormField(

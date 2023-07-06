@@ -78,11 +78,15 @@ class _MainDialerState extends State<MainDialer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             InputFieldMaker(
-                'Enter a fixed number', fixed_no, TextInputType.phone),
-            InputFieldMaker('Enter option', extension, TextInputType.phone),
+                'Enter a fixed number', fixed_no, TextInputType.phone, context),
+            InputFieldMaker(
+                'Enter option', extension, TextInputType.phone, context),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               child: TextFormField(
+                onEditingComplete: () {
+                  FocusScope.of(context).unfocus(); // Dismiss the keyboard
+                },
                 controller: number_to_dial,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
